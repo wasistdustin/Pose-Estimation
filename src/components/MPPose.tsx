@@ -22,6 +22,7 @@ const MPPose = () => {
   const [text, setText] = useState<JSX.Element | null>(null);
 
   useEffect(() => {
+    //Init Pose Detection
     const pose = new Pose({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
@@ -38,6 +39,7 @@ const MPPose = () => {
     });
     pose.onResults(onResults);
 
+    //get frame for pose estimation
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
@@ -57,6 +59,7 @@ const MPPose = () => {
     }
   }, []);
 
+  //draw markers with canvas + start counter component
   const onResults = (results: Results) => {
     const video = webcamRef.current?.video;
     const canvasElement = canvasRef.current;
@@ -84,7 +87,6 @@ const MPPose = () => {
       canvasElement.height
     );
     if (results.poseLandmarks) {
-      //console.log("Found Hand");
       const landmarksArray = [results.poseLandmarks];
       for (const landmarks of landmarksArray) {
         drawConnectors(canvasCtx, landmarks, POSE_CONNECTIONS, {
@@ -93,6 +95,7 @@ const MPPose = () => {
         });
         drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
       }
+      //start Reps component (counting push-ups)
       const comText = <Reps array={results} />;
       setText(comText);
     }
