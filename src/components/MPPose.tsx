@@ -33,8 +33,8 @@ const MPPose = () => {
       smoothLandmarks: true,
       enableSegmentation: true,
       smoothSegmentation: true,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5,
+      minDetectionConfidence: 0.8,
+      minTrackingConfidence: 0.8,
     });
     pose.onResults(onResults);
 
