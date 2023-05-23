@@ -63,15 +63,16 @@ const Reps = ({ array }: Props) => {
       const AngleSHW = `Handgelenk-Knöchel-Schulter: ${anngle}`;
       const AngleHAW = `Schulter-Elle-Handgelenk: ${anngle1}`;
       const AngleSHA = `Shoulder-Hip-Ankle ${anngle2}`; //klappt sher gut -> nahe 180
-      const DiffY = Math.abs(landmarksArray[0][28].y - landmarksArray[0][12].y);
+      const DiffY =
+        Math.abs(landmarksArray[0][28].y - landmarksArray[0][12].y) * 100;
 
       setAngleText(AngleSHW);
       setAngleText1(AngleHAW);
       setAngleText2(AngleSHA);
       setDiffY(`Diff S&A: ${DiffY}`);
 
-      //Down noch Y Diff hinzufügen..
-      if (anngle < 25 && anngle1 < 140 && !pushUp) {
+      //Done - Down noch Y Diff hinzufügen
+      if (anngle < 25 && anngle1 < 140 && DiffY < 0.7 * DistY && !pushUp) {
         pushUp = true;
         setDirection("Down");
         setDummy(`Down Y: ${DiffY} `);
@@ -89,9 +90,8 @@ const Reps = ({ array }: Props) => {
         setCounter(cnt);
         setDummyUp(`Up Y: ${DiffY} `);
       } else if (initY) {
-        const DistY = Math.abs(
-          landmarksArray[0][28].y - landmarksArray[0][12].y
-        );
+        DistY =
+          Math.abs(landmarksArray[0][28].y - landmarksArray[0][12].y) * 100;
         setDistY(`Fixed Wert: ${DistY}`);
       }
     };
@@ -100,7 +100,7 @@ const Reps = ({ array }: Props) => {
   }, [array.poseLandmarks]);
 
   return (
-    <div>
+    <div style={{}}>
       Hier: {direction} <br /> {counter} <br /> {angleText} <br /> {angleText1}{" "}
       <br /> {angleText2}
       <br /> {distY}
