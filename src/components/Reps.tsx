@@ -25,9 +25,12 @@ const Reps = ({ array }: Props) => {
   const [dummy, setDummy] = useState("");
   const [dummyUp, setDummyUp] = useState("");
 
+  // useEffect because of changing variables
   useEffect(() => {
     const updateReps = () => {
       const landmarksArray = [array.poseLandmarks];
+
+      // init important landmarks for angle or distance calculation
       const landmarks1 = {
         x: landmarksArray[0][16].x, //Handgelenk
         y: landmarksArray[0][16].y,
@@ -53,11 +56,11 @@ const Reps = ({ array }: Props) => {
         y: landmarksArray[0][16].y,
       };
       const opt = { small: true, round: true };
-      //Wrist-Ankle-Shoulder
+      //Calc Wrist-Ankle-Shoulder Angle
       let anngle = findAngle(landmarks1, landmarks5, landmarks2, opt);
-      //Shoulder-Ellbow-Wrist
+      //Calc Shoulder-Ellbow-Wrist Angle
       let anngle1 = findAngle(landmarks2, landmarks4, landmarks6, opt);
-      //Shoulder-Hip-Ankle
+      //Calc Shoulder-Hip-Ankle Angle
       let anngle2 = findAngle(landmarks2, landmarks3, landmarks5, opt);
 
       const AngleSHW = `Handgelenk-Knöchel-Schulter: ${anngle}`;
