@@ -12,14 +12,8 @@ let cnt = 0;
 const MPPose = () => {
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  let pushUp = true;
 
-  const [angleText, setAngleText] = useState("");
-  const [angleText1, setAngleText1] = useState("");
-  const [diffY, setDiffY] = useState("");
-  const [direction, setDirection] = useState("");
-  const [counter, setCounter] = useState(0);
-  const [text, setText] = useState<JSX.Element | null>(null);
+  const [results, setResults] = useState<Results | null>(null);
 
   useEffect(() => {
     //Init Pose Detection
@@ -96,8 +90,9 @@ const MPPose = () => {
         drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
       }
       //start Reps component (counting push-ups)
-      const comText = <Reps array={results} />;
-      setText(comText);
+      setResults(results);
+    } else {
+      setResults(null);
     }
     canvasCtx.restore();
   };
@@ -106,7 +101,7 @@ const MPPose = () => {
     <>
       <div style={{ fontSize: 60 }}>
         <br />
-        {text}
+        {results && <Reps results={results} />}
         <br />
       </div>
       <div>
