@@ -7,11 +7,12 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Results } from "@mediapipe/pose";
 import findAngle from "angle-between-landmarks";
 import Reps from "./Reps";
+import Canvas from "./Canvas";
 
 let cnt = 0;
 const MPPose = () => {
   const webcamRef = useRef<Webcam | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [results, setResults] = useState<Results | null>(null);
 
@@ -55,46 +56,13 @@ const MPPose = () => {
 
   //draw markers with canvas + start counter component
   const onResults = (results: Results) => {
-    const video = webcamRef.current?.video;
-    const canvasElement = canvasRef.current;
-    if (!canvasElement) return;
-    const canvasCtx = canvasElement.getContext("2d");
-    if (!canvasCtx) return;
-
-    const videoWidth = video?.videoWidth;
-    const videoHeight = video?.videoHeight;
-    if (!videoWidth || !videoHeight) return;
-
-    // Set canvas width
-    canvasElement.width = videoWidth;
-    canvasElement.height = videoHeight;
-
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, videoWidth, videoHeight);
-    canvasCtx.translate(videoWidth, 0);
-    canvasCtx.scale(-1, 1);
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
     if (results.poseLandmarks) {
       const landmarksArray = [results.poseLandmarks];
-      for (const landmarks of landmarksArray) {
-        drawConnectors(canvasCtx, landmarks, POSE_CONNECTIONS, {
-          color: "#00FF00",
-          lineWidth: 5,
-        });
-        drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
-      }
       //start Reps component (counting push-ups)
       setResults(results);
     } else {
       setResults(null);
     }
-    canvasCtx.restore();
   };
 
   return (
@@ -121,20 +89,13 @@ const MPPose = () => {
             height: 720,
           }}
         ></Webcam>
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            left: "0",
-            right: "0",
-            textAlign: "center",
-            zIndex: 9,
-            width: 1280,
-            height: 720,
-          }}
-        ></canvas>
+        {results && (
+          <Canvas
+            results={results}
+            webcamRef={webcamRef}
+            canvasRef={canvasRef}
+          />
+        )}
       </div>
     </>
   );
