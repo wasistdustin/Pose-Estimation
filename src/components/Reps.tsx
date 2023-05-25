@@ -78,7 +78,7 @@ const Reps = ({ results }: Props) => {
       setAngleText2(angleSHA);
       setDiffY(`Diff S&A: ${diffY}`);
       setDistanceY(`Fixed Wert: ${distY}`);
-      console.log(landmarksArray);
+      //console.log(landmarksArray);
       setLandmarkArray(results);
       //UP
       if (
