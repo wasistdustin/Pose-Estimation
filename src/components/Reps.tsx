@@ -11,15 +11,18 @@ import Logger from "./Logger";
 interface Props {
   results: Results;
 }
-let pushUp = true;
-let initY = true;
-let cnt = 0;
+
 let distY = 0;
 const Reps = ({ results }: Props) => {
   //Helpful States
+  //Counter States
   const [counter, setCounter] = useState(0);
   const [down, setDown] = useState(false);
   const [up, setUp] = useState(false);
+  // DistY State
+  const [distY, setDistY] = useState(0);
+  // Init State for DistY
+  const [initY, setInitY] = useState(true);
 
   //States for Debugging
   const [landmarkArray, setLandmarkArray] = useState<Results | null>(null);
@@ -103,8 +106,6 @@ const Reps = ({ results }: Props) => {
       ) {
         setDown(true);
         setDirection(`Down ${down} ${up}`);
-
-        //cnt = cnt + 1;
       }
       //COUNTER
       else if (up === true && down === true) {
@@ -121,13 +122,14 @@ const Reps = ({ results }: Props) => {
         initY
       ) {
         setDirection("Start");
-        initY = false;
+        setInitY(false);
       }
       // Calculate Init State
       else if (initY) {
         setDirection("Warten auf Positionierung");
-        distY =
-          Math.abs(landmarksArray[0][28].y - landmarksArray[0][12].y) * 100;
+        setDistY(
+          Math.abs(landmarksArray[0][28].y - landmarksArray[0][12].y) * 100
+        );
       }
     };
 
