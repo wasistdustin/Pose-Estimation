@@ -9,7 +9,6 @@ import findAngle from "angle-between-landmarks";
 import Reps from "./Reps";
 import Canvas from "./Canvas";
 
-let cnt = 0;
 const MPPose = () => {
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
