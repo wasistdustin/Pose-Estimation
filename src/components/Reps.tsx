@@ -19,14 +19,10 @@ const Reps = ({ results }: Props) => {
   const [counter, setCounter] = useState(0);
   const [down, setDown] = useState(false);
   const [up, setUp] = useState(false);
-  // DistY State
-  const [distY, setDistY] = useState(0);
-  // Init State for DistY
-  const [initY, setInitY] = useState(true);
 
   //States for Debugging
   const [landmarkArray, setLandmarkArray] = useState<Results | null>(null);
-  const [direction, setDirection] = useState("");
+  const [direction, setDirection] = useState("Start");
   const [angleText, setAngleText] = useState("");
   const [angleText1, setAngleText1] = useState("");
   const [angleText2, setAngleText2] = useState("");
@@ -34,13 +30,17 @@ const Reps = ({ results }: Props) => {
   const [diffY, setDiffY] = useState("");
   const [dummy, setDummy] = useState("");
   const [dummyUp, setDummyUp] = useState("");
+  // DistY State
+  const [distY, setDistY] = useState(0);
+  // Init State for DistY
+  const [initY, setInitY] = useState(true);
 
   //useEffect because of changing variables
   useEffect(() => {
     const updateReps = () => {
       const landmarksArray = [results.poseLandmarks];
 
-      // init important landmarks for angle or distance calculation - all right side
+      // init important landmarks for angle (or distance calculation)
       const leftWrist = {
         x: landmarksArray[0][15].x, //left Wrist
         y: landmarksArray[0][15].y,
@@ -114,13 +114,13 @@ const Reps = ({ results }: Props) => {
       setAngleText(`Handgelenk-Knöchel-Schulter: ${angleAnkleR}`);
       setAngleText1(`Schulter-Elle-Handgelenk: ${angleElbowR}`);
       setAngleText2(`Shoulder-Hip-Ankle ${angleHipR}`);
-      setDiffY(`Visibality ANkle ${rightAnkle.y}`);
-      setDistanceY(`Visabiliy ${rightWrist.y}`);
+      setDiffY(`Y-coord Ankle ${rightAnkle.y}`);
+      setDistanceY(`Y-coord Wrist ${rightWrist.y}`);
       //console.log(landmarksArray);
-      setLandmarkArray(results);
+      //setLandmarkArray(results);
       //UP 3 angles & Ankle higher than Wrist (x-coord) & visibility from ankle & shoulder & 2 booleans
       if (
-        (angleAnkleR > 30 &&
+        (angleAnkleR > 29 &&
           angleElbowR > 170 &&
           angleHipR > 170 &&
           !up &&
@@ -128,7 +128,7 @@ const Reps = ({ results }: Props) => {
           visShoulderR > 0.8 &&
           visAnkleR > 0.8 &&
           rightAnkle.y < rightWrist.y) ||
-        (angleAnkleL > 30 &&
+        (angleAnkleL > 29 &&
           angleElbowL > 170 &&
           angleHipL > 170 &&
           !up &&
@@ -139,7 +139,7 @@ const Reps = ({ results }: Props) => {
       ) {
         setUp(true);
         setDirection(`Last State: Up`);
-        setDummyUp(`Up Y: ${diffY} `);
+        //setDummyUp(`Up Y: ${diffY} `);
       }
       //DOWN
       else if (
@@ -195,11 +195,12 @@ const Reps = ({ results }: Props) => {
   return (
     <div style={{}}>
       {/* <Logger results={landmarkArray}></Logger> */}
-      {direction} <br /> Wiederholungen: {counter} <br /> {angleText} <br />{" "}
-      {angleText1} <br /> {angleText2}
-      <br /> {distanceY}
+      {direction} <br /> Wiederholungen: {counter}
+      {/* <br /> {angleText} <br />{" "}
+      {angleText1} <br /> {angleText2} */}
+      {/* <br /> {distanceY}
       <br /> {diffY}
-      <br /> {dummy} {dummyUp}
+      <br /> {dummy} {dummyUp} */}
     </div>
   );
 };

@@ -66,7 +66,7 @@ const MPPose = () => {
 
   return (
     <>
-      <div style={{ fontSize: 60 }}>
+      <div style={{ fontSize: 50 }}>
         <br />
         {results && <Reps results={results} />}
         <br />
@@ -93,6 +93,7 @@ const MPPose = () => {
             results={results}
             webcamRef={webcamRef}
             canvasRef={canvasRef}
+            drawRightAngles={true}
           />
         )}
       </div>
