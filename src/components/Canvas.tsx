@@ -96,7 +96,7 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
           [landmarksArray[0][16], landmarksArray[0][28], landmarksArray[0][12]],
           POSE_CONNECTIONS,
           {
-            color: "#FF0000",
+            color: "#FFFF00",
             lineWidth: 5,
           }
         );
@@ -130,13 +130,39 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
         canvasCtx.font = "bold 30px Arial";
         canvasCtx.shadowColor = "white";
         canvasCtx.shadowBlur = 20;
-        canvasCtx.fillStyle = "#FF0000";
-        //Ankle
-        canvasCtx.fillText(
-          `${angleAnkleR}`,
-          -landmarksArray[0][28].x * canvasElement.width,
-          landmarksArray[0][28].y * canvasElement.height
-        );
+        canvasCtx.fillStyle = "#FFFF00";
+        // if ankleR meet req for UP or DOWN
+        if (angleAnkleR > 29 || angleAnkleR < 26) {
+          canvasCtx.fillStyle = "#00FF00";
+          canvasCtx.fillText(
+            `${angleAnkleR}`,
+            -landmarksArray[0][28].x * canvasElement.width,
+            landmarksArray[0][28].y * canvasElement.height
+          );
+        }
+        //Ankle Thresholds - 3 states because init though was to display more text..
+        else if (angleAnkleR >= 25 && angleAnkleR <= 26) {
+          canvasCtx.fillStyle = "#FF0000";
+          canvasCtx.fillText(
+            `${angleAnkleR}`,
+            -landmarksArray[0][28].x * canvasElement.width,
+            landmarksArray[0][28].y * canvasElement.height
+          );
+        } else if (angleAnkleR <= 29 && angleAnkleR >= 28) {
+          canvasCtx.fillStyle = "#FF0000";
+          canvasCtx.fillText(
+            `${angleAnkleR}`,
+            -landmarksArray[0][28].x * canvasElement.width,
+            landmarksArray[0][28].y * canvasElement.height
+          );
+        } else {
+          canvasCtx.fillText(
+            `${angleAnkleR}`,
+            -landmarksArray[0][28].x * canvasElement.width,
+            landmarksArray[0][28].y * canvasElement.height
+          );
+        }
+
         // Elbow
         canvasCtx.fillStyle = "#8800FF";
         canvasCtx.fillText(
@@ -145,12 +171,25 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
           landmarksArray[0][14].y * canvasElement.height
         );
         // Hip
-        canvasCtx.fillStyle = "#00FFFF";
-        canvasCtx.fillText(
-          `${angleHipR}`,
-          -landmarksArray[0][24].x * canvasElement.width,
-          landmarksArray[0][24].y * canvasElement.height
-        );
+        if (
+          (angleAnkleR > 29 && angleElbowR > 170 && angleHipR > 170) ||
+          (angleAnkleR < 25 && angleElbowR < 140 && angleHipR > 150)
+        ) {
+          canvasCtx.fillStyle = "#00FF00";
+          canvasCtx.fillText(
+            `${angleHipR}`,
+            -landmarksArray[0][24].x * canvasElement.width,
+            landmarksArray[0][24].y * canvasElement.height
+          );
+        } else {
+          canvasCtx.fillStyle = "#00FFFF";
+          canvasCtx.fillText(
+            `${angleHipR}`,
+            -landmarksArray[0][24].x * canvasElement.width,
+            landmarksArray[0][24].y * canvasElement.height
+          );
+        }
+
         canvasCtx.restore();
       }
     } else {
