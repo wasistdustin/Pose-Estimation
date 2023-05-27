@@ -8,6 +8,7 @@ import { Results } from "@mediapipe/pose";
 import findAngle from "angle-between-landmarks";
 import Reps from "./Reps";
 import Canvas from "./Canvas";
+import Squats from "./Squats";
 
 const MPPose = () => {
   const webcamRef = useRef<Webcam | null>(null);
@@ -68,7 +69,8 @@ const MPPose = () => {
     <>
       <div style={{ fontSize: 50 }}>
         <br />
-        {results && <Reps results={results} />}
+        {/* {results && <Reps results={results} />} */}
+        {results && <Squats results={results} />}
         <br />
       </div>
       <div>
@@ -93,7 +95,7 @@ const MPPose = () => {
             results={results}
             webcamRef={webcamRef}
             canvasRef={canvasRef}
-            drawRightAngles={true}
+            drawRightAngles={false}
           />
         )}
       </div>
