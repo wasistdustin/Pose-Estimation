@@ -8,15 +8,22 @@ import findAngle from "angle-between-landmarks";
 
 interface Props {
   results: Results;
-  drawRightAngles?: boolean;
+  drawPushUpAnglesR?: boolean;
+  drawSquatsAnglesR?: boolean;
   webcamRef: React.MutableRefObject<Webcam | null>;
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
 }
 
-const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
-  console.log(results);
-  console.log(webcamRef);
-  console.log(canvasRef);
+const Canvas = ({
+  results,
+  webcamRef,
+  canvasRef,
+  drawPushUpAnglesR,
+  drawSquatsAnglesR,
+}: Props) => {
+  // console.log(results);
+  // console.log(webcamRef);
+  // console.log(canvasRef);
 
   useEffect(() => {
     if (!webcamRef || !canvasRef) return;
@@ -45,13 +52,13 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
       canvasElement.width,
       canvasElement.height
     );
-    console.log(results);
+    //console.log(results);
 
     if (results.poseLandmarks) {
       const landmarksArray = [results.poseLandmarks];
-      if (!drawRightAngles) {
+      if (!drawPushUpAnglesR && !drawSquatsAnglesR) {
         for (const landmarks of landmarksArray) {
-          console.log(landmarks);
+          console.log(`Alle Marker`);
           drawConnectors(canvasCtx, landmarks, POSE_CONNECTIONS, {
             color: "#00FF00",
             lineWidth: 5,
@@ -61,7 +68,8 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
             lineWidth: 2,
           });
         }
-      } else if (drawRightAngles) {
+      } else if (drawPushUpAnglesR) {
+        console.log(`PushUp Marker`);
         const opt = { small: true, round: true };
 
         const rightWrist = {
@@ -100,8 +108,8 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
             lineWidth: 5,
           }
         );
-        console.log(`X: ${landmarksArray[0][16].x}`);
-        console.log(`Y: ${landmarksArray[0][16].y}`);
+        // console.log(`X: ${landmarksArray[0][16].x}`);
+        //console.log(`Y: ${landmarksArray[0][16].y}`);
 
         //RIGHT: Shoulder-Elbow-Wrist
         drawConnectors(
@@ -189,6 +197,109 @@ const Canvas = ({ results, webcamRef, canvasRef, drawRightAngles }: Props) => {
             landmarksArray[0][24].y * canvasElement.height
           );
         }
+
+        canvasCtx.restore();
+      } else if (drawSquatsAnglesR) {
+        console.log(`SquatMarker Marker`);
+        const opt = { small: true, round: true };
+
+        const rightWrist = {
+          x: landmarksArray[0][16].x, //right Wrist
+          y: landmarksArray[0][16].y,
+        };
+        const rightShoulder = {
+          x: landmarksArray[0][12].x, //right Shoulder
+          y: landmarksArray[0][12].y,
+        };
+        const rightHip = {
+          x: landmarksArray[0][24].x, //right Hip
+          y: landmarksArray[0][24].y,
+        };
+        const rightElbow = {
+          x: landmarksArray[0][14].x, //right Elbow
+          y: landmarksArray[0][14].y,
+        };
+        const rightAnkle = {
+          x: landmarksArray[0][28].x, //right Ankle
+          y: landmarksArray[0][28].y,
+        };
+        const rightKnee = {
+          x: landmarksArray[0][26].x, //right knee
+          y: landmarksArray[0][26].y,
+        };
+        //right Side
+        //Calc Ankle-Knee-Hip Angle
+        let angleKneeR = findAngle(rightAnkle, rightKnee, rightHip, opt);
+        // Calc Elbow-Shoulder-Hip Angle
+        let angleShoulderR = findAngle(
+          rightElbow,
+          rightShoulder,
+          rightHip,
+          opt
+        );
+        // Calc Knee-Hip-Shoulder
+        let angleHipDownR = findAngle(rightKnee, rightHip, rightShoulder, opt);
+
+        drawConnectors(
+          canvasCtx,
+          [rightKnee, rightHip, rightShoulder],
+          POSE_CONNECTIONS,
+          {
+            color: "#00FFFF",
+            lineWidth: 15,
+          }
+        );
+        //Ankle-Knee-Hip
+        drawConnectors(
+          canvasCtx,
+          [rightAnkle, rightKnee, rightHip],
+          POSE_CONNECTIONS,
+          {
+            color: "#FFFF00",
+            lineWidth: 5,
+          }
+        );
+
+        //RIGHT: Shoulder-Elbow-Wrist
+        drawConnectors(
+          canvasCtx,
+          [rightElbow, rightShoulder, rightHip],
+          POSE_CONNECTIONS,
+          {
+            color: "#FF00FF",
+            lineWidth: 5,
+          }
+        );
+        //RIGHT: Shoulder-Hip-Ankle
+
+        // Draw Angles
+        canvasCtx.save();
+        canvasCtx.scale(-1, 1); // invert canvas object to get text the right way
+        canvasCtx.font = "bold 30px Arial";
+        canvasCtx.shadowColor = "white";
+        canvasCtx.shadowBlur = 20;
+        canvasCtx.fillStyle = "#FFFF00";
+
+        // Hip
+        canvasCtx.fillStyle = "#00FFFF";
+        canvasCtx.fillText(
+          `${angleHipDownR}`,
+          -rightHip.x * canvasElement.width,
+          rightHip.y * canvasElement.height
+        ); // Knee
+        canvasCtx.fillStyle = "#FFFF00";
+        canvasCtx.fillText(
+          `${angleKneeR}`,
+          -rightKnee.x * canvasElement.width,
+          rightKnee.y * canvasElement.height
+        );
+        // Shoulder
+        canvasCtx.fillStyle = "#FF00FF";
+        canvasCtx.fillText(
+          `${angleShoulderR}`,
+          -rightShoulder.x * canvasElement.width,
+          rightShoulder.y * canvasElement.height
+        );
 
         canvasCtx.restore();
       }

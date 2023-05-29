@@ -9,12 +9,16 @@ import findAngle from "angle-between-landmarks";
 import Reps from "./Reps";
 import Canvas from "./Canvas";
 import Squats from "./Squats";
+import Prediction from "./Prediction";
 
 const MPPose = () => {
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [results, setResults] = useState<Results | null>(null);
+  //Drawing Angles for WO
+  const [drawPushUpAnglesR, setDrawPushUpAnglesR] = useState(false);
+  const [drawSquatsAnglesR, setDrawSquatsAnglesR] = useState(false);
 
   useEffect(() => {
     //Init Pose Detection
@@ -54,6 +58,10 @@ const MPPose = () => {
     }
   }, []);
 
+  const setDrawValue = (pushUp: boolean, squats: boolean) => {
+    setDrawPushUpAnglesR(pushUp);
+    setDrawSquatsAnglesR(squats);
+  };
   //draw markers with canvas + start counter component
   const onResults = (results: Results) => {
     if (results.poseLandmarks) {
@@ -69,8 +77,11 @@ const MPPose = () => {
     <>
       <div style={{ fontSize: 50 }}>
         <br />
+        {results && (
+          <Prediction setDrawValue={setDrawValue} results={results} />
+        )}
         {/* {results && <Reps results={results} />} */}
-        {results && <Squats results={results} />}
+        {/* {results && <Squats results={results} />} */}
         <br />
       </div>
       <div>
@@ -95,7 +106,8 @@ const MPPose = () => {
             results={results}
             webcamRef={webcamRef}
             canvasRef={canvasRef}
-            drawRightAngles={false}
+            drawPushUpAnglesR={drawPushUpAnglesR}
+            drawSquatsAnglesR={drawSquatsAnglesR}
           />
         )}
       </div>
