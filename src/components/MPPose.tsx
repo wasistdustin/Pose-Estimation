@@ -6,7 +6,7 @@ import { POSE_CONNECTIONS } from "@mediapipe/pose";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Results } from "@mediapipe/pose";
 import findAngle from "angle-between-landmarks";
-import Reps from "./Reps";
+import PushUp from "./PushUp";
 import Canvas from "./Canvas";
 import Squats from "./Squats";
 import Prediction from "./Prediction";
@@ -66,7 +66,7 @@ const MPPose = () => {
   const onResults = (results: Results) => {
     if (results.poseLandmarks) {
       const landmarksArray = [results.poseLandmarks];
-      //start Reps component (counting push-ups)
+      //start PushUp component (counting push-ups)
       setResults(results);
     } else {
       setResults(null);
@@ -77,10 +77,10 @@ const MPPose = () => {
     <>
       <div style={{ fontSize: 50 }}>
         <br />
-        {results && (
+        {/* {results && (
           <Prediction setDrawValue={setDrawValue} results={results} />
-        )}
-        {/* {results && <Reps results={results} />} */}
+        )} */}
+        {results && <PushUp results={results} />}
         {/* {results && <Squats results={results} />} */}
         <br />
       </div>

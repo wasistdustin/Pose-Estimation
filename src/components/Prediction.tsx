@@ -7,7 +7,7 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Results, NormalizedLandmarkList } from "@mediapipe/pose";
 import findAngle from "angle-between-landmarks";
 import Logger from "./Logger";
-import Reps from "./Reps";
+import PushUp from "./PushUp";
 import Squats from "./Squats";
 
 interface Props {
@@ -180,7 +180,7 @@ const Prediction = ({ results, setDrawValue }: Props) => {
     <div style={{}}>
       {/* <Logger results={landmarkArray}></Logger> */}
       {prediction}
-      {results && pushUp && <Reps results={results} />}
+      {results && pushUp && <PushUp results={results} />}
       {results && squats && <Squats results={results} />}
     </div>
   );

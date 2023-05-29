@@ -13,7 +13,7 @@ interface Props {
 }
 
 let distY = 0;
-const Reps = ({ results }: Props) => {
+const PushUp = ({ results }: Props) => {
   //Helpful States
   //Counter States
   const [counter, setCounter] = useState(0);
@@ -37,7 +37,7 @@ const Reps = ({ results }: Props) => {
 
   //useEffect because of changing variables
   useEffect(() => {
-    const updateReps = () => {
+    const updatePushUp = () => {
       const landmarksArray = [results.poseLandmarks];
 
       // init important landmarks for angle (or distance calculation)
@@ -189,7 +189,7 @@ const Reps = ({ results }: Props) => {
       // }
     };
 
-    updateReps();
+    updatePushUp();
   }, [results.poseLandmarks]);
 
   return (
@@ -205,4 +205,4 @@ const Reps = ({ results }: Props) => {
   );
 };
 
-export default Reps;
+export default PushUp;
