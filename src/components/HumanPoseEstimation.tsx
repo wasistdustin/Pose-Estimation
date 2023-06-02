@@ -11,7 +11,7 @@ import Canvas from "./Canvas";
 import Squats from "./Squats";
 import Prediction from "./Prediction";
 
-const MPPose = () => {
+const HumanPoseEstimation = () => {
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -77,10 +77,10 @@ const MPPose = () => {
     <>
       <div style={{ fontSize: 50 }}>
         <br />
-        {/* {results && (
+        {results && (
           <Prediction setDrawValue={setDrawValue} results={results} />
-        )} */}
-        {results && <PushUp results={results} />}
+        )}
+        {/* {results && <PushUp results={results} />} */}
         {/* {results && <Squats results={results} />} */}
         <br />
       </div>
@@ -115,4 +115,4 @@ const MPPose = () => {
   );
 };
 
-export default MPPose;
+export default HumanPoseEstimation;
